@@ -6,8 +6,8 @@ An inventory application
 
 ### 1.1 View Application and Documentation
 
-- Application live url - 
-- Documentation - 
+- Application live url - https://inventory-staging-api.onrender.com
+- Documentation - https://inventory-staging-api.onrender.com/documentation
 
 ### 1.2 Requirements
 
@@ -48,7 +48,7 @@ $ go run main.go
 
 ```
 
-You can now head to `http://localhost:5000/documentation` and see your API Swagger docs.
+You can now head to `http://localhost:5000/docs` and see your API Swagger docs.
 
 ## 2. Project structure
 

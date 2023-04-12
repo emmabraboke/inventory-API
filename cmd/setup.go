@@ -89,9 +89,9 @@ func Setup() {
 	routes.CustomerRoute(group, customerSrv, tokenSrv)
 	routes.TransactionRoute(group, transactionSrv, tokenSrv)
 
-	router.GET("/documentation/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.GET("/documentation", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/documentation/index.html")
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/docs", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/docs/index.html")
 	})
 
 	router.Run(":5000")

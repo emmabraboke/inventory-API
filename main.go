@@ -9,7 +9,7 @@ func main() {
 	// @version         2.0
 	// @description     Inventory App
 
-	// @host      localhost:5000
+	// @host      inventory-staging-api.onrender.com
 	// @schemes http https
 	// @BasePath  /api/v1
 
