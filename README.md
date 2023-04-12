@@ -105,31 +105,8 @@ This template was made with a well-defined directory structure.
 └───utils
 ```
 
-## 3. Some NPM commands
 
-```sh
-# development
-$ npm run start
+## 3. Technologies/Tools
 
-# watch mode
-$ npm run start:dev
-
-# Lint the project files using TSLint
-$ npm run lint
-
-# Format document
-$ npm run format
-
-# Run the migrations
-$ npm run migration
-
-# Revert the migrations
-$ npm run migration:down
-```
-
-## 4. Technologies/Tools
-
-- NestJS
-- ObjectionJs
-- KnexJs
-- TypeScript
+- Golang
+- mongoDB
