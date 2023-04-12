@@ -35,10 +35,12 @@ func NewUserSrv(repo userRepo.UserRepository, validation validationService.Valid
 // Create User
 // @Summary	Create User
 // @Description	Create A user
-// @Tags	Create User
+// @Tags	Auth
 // @Accept	json
 // @Produce	json
-// @Router	/user [get]
+// @Param request body userEntity.CreateUserReq true "user details"
+// @Success	200  {object} string
+// @Router	/user [post]
 func (t *userSrv) CreateUser(req *userEntity.CreateUserReq) error {
 
 	if err := t.validation.Validate(req); err != nil {
@@ -58,6 +60,15 @@ func (t *userSrv) CreateUser(req *userEntity.CreateUserReq) error {
 	return t.repo.CreateUser(req)
 }
 
+// Login
+// @Summary	Login
+// @Description	Login
+// @Tags	Auth
+// @Accept	json
+// @Produce	json
+// @Param	request	body userEntity.Login true "login details"
+// @Success	200  {object} userEntity.CreateUserRes
+// @Router	/user/login [post]
 func (t *userSrv) Login(req *userEntity.Login) (*userEntity.CreateUserRes, *string, error) {
 	user, err := t.repo.GetUserByEmail(req.Email)
 
@@ -106,6 +117,15 @@ func (t *userSrv) Login(req *userEntity.Login) (*userEntity.CreateUserRes, *stri
 	return &res, &token, nil
 }
 
+// Get Users
+// @Summary	Get Users
+// @Description	Get Users
+// @Tags	User
+// @Accept	json
+// @Produce	json
+// @Success	200  {object} []userEntity.CreateUserRes
+// @Security ApiKeyAuth
+// @Router	/user/ [get]
 func (t *userSrv) GetUsers() ([]*userEntity.CreateUserRes, error) {
 	users, err := t.repo.GetUsers()
 
@@ -116,6 +136,16 @@ func (t *userSrv) GetUsers() ([]*userEntity.CreateUserRes, error) {
 	return users, nil
 }
 
+// Get User
+// @Summary	Get User
+// @Description	Get User
+// @Tags	User
+// @Accept	json
+// @Produce	json
+// @Param	request	path string true "user id"
+// @Success	200  {object} userEntity.CreateUserRes
+// @Security ApiKeyAuth
+// @Router	/user/{id} [get]
 func (t *userSrv) GetUser(id string) (*userEntity.CreateUserRes, error) {
 	user, err := t.repo.GetUser(id)
 
@@ -126,10 +156,31 @@ func (t *userSrv) GetUser(id string) (*userEntity.CreateUserRes, error) {
 	return user, nil
 }
 
+// Update User
+// @Summary	Update Users
+// @Description	Update User
+// @Tags	User
+// @Accept	json
+// @Produce	json
+// @Param	request	path string true "user id"
+// @Param	request	body userEntity.UpdateUserReq true "update details"
+// @Success	200  {object} userEntity.CreateUserRes
+// @Security ApiKeyAuth
+// @Router	/user/{id} [patch]
 func (t *userSrv) UpdateUser(id string, req *userEntity.UpdateUserReq) (*userEntity.CreateUserRes, error) {
 	return t.repo.UpdateUser(id, req)
 }
 
+// Delete User
+// @Summary	Delete Users
+// @Description	Delete Users
+// @Tags	User
+// @Accept	json
+// @Produce	json
+// @Param	request	path string true "user id"
+// @Success	200  {object} string
+// @Security ApiKeyAuth
+// @Router	/user/{id} [delete]
 func (t *userSrv) DeleteUser(id string) error {
 	return t.repo.DeleteUser(id)
 }

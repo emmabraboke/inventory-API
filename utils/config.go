@@ -11,14 +11,13 @@ import (
 type Config struct {
 	DatabaseURI    string `mapstructure:"DATABASE_URI"`
 	PaystackSecret string `mapstructure:"PAYSTACK_SECRET"`
+	JWTSecret      string `mapstructure:"JWT_SECRET"`
 }
 
 func GetConfig(path string) (*Config, error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
 	viper.SetConfigFile(".env")
-
-	
 
 	err := viper.ReadInConfig()
 	if err != nil {

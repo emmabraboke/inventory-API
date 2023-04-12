@@ -22,11 +22,13 @@ import (
 	"inventory/internals/service/validationService"
 	"inventory/utils"
 	"log"
+	"net/http"
+
+	_ "inventory/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "inventory/docs"
 )
 
 func Setup() {
@@ -57,7 +59,7 @@ func Setup() {
 	transactionRepo := mongoTransactionRepo.NewTransactionRepo(transactionDatabase)
 	invoiceRepo := mongoinvoiceRepo.NewInvoiceRepo(invoiceDatabase)
 
-	tokenSrv := tokenService.NewTokenSrv("knnlnl")
+	tokenSrv := tokenService.NewTokenSrv(config.JWTSecret)
 	crypoSrv := cryptoService.NewCryptoService()
 	paymentSrv := paymentService.NewPaymentSrv(config.PaystackSecret, paystackUrl)
 
@@ -72,6 +74,12 @@ func Setup() {
 	router.Use(middlewares.CorsMiddleware())
 	group := router.Group("/api/v1")
 
+	// docs.SwaggerInfo.Host = "localhost:5000"
+	// docs.SwaggerInfo.BasePath = "/api/v1"
+	// docs.SwaggerInfo.Title = "Inventory API"
+	// docs.SwaggerInfo.Version = "1.0"
+	// docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	group.Use(gin.Logger())
 
 	routes.UserRoute(group, userSrv, tokenSrv)
@@ -81,7 +89,10 @@ func Setup() {
 	routes.CustomerRoute(group, customerSrv, tokenSrv)
 	routes.TransactionRoute(group, transactionSrv, tokenSrv)
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/documentation/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/documentation", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/documentation/index.html")
+	})
 
 	router.Run(":5000")
 }

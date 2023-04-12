@@ -39,6 +39,6 @@ type UpdateUserReq struct {
 	FirstName    *string   `json:"firstName" bson:"firstName" validate:"min=3"`
 	LastName     *string   `json:"lastName" bson:"lastName" validate:"min=3"`
 	ProfileImage *string   `json:"profileImage" bson:"profileImage"`
-	RefreshToken *string    `json:"refreshToken" bson:"refreshToken"`
+	RefreshToken *string   `json:"refreshToken" bson:"refreshToken"`
 	UpdatedAt    time.Time `json:"updateAt" bson:"updateAt"`
 }

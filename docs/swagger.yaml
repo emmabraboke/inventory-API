@@ -1,15 +1,228 @@
+basePath: /api/v1
+definitions:
+  userEntity.CreateUserReq:
+    properties:
+      _id:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        minLength: 3
+        type: string
+      lastName:
+        minLength: 3
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      profileImage:
+        type: string
+      refreshToken:
+        type: string
+      updateAt:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    type: object
+  userEntity.CreateUserRes:
+    properties:
+      _id:
+        type: string
+      createdAt:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      profileImage:
+        type: string
+      updateAt:
+        type: string
+    type: object
+  userEntity.Login:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  userEntity.UpdateUserReq:
+    properties:
+      firstName:
+        minLength: 3
+        type: string
+      lastName:
+        minLength: 3
+        type: string
+      profileImage:
+        type: string
+      refreshToken:
+        type: string
+      updateAt:
+        type: string
+    type: object
+host: localhost:5000
 info:
   contact: {}
+  description: Inventory App
+  title: Inventory API
+  version: "2.0"
 paths:
   /user:
-    get:
+    post:
       consumes:
       - application/json
       description: Create A user
+      parameters:
+      - description: user details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/userEntity.CreateUserReq'
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
       summary: Create User
       tags:
-      - Create User
+      - Auth
+  /user/:
+    get:
+      consumes:
+      - application/json
+      description: Get Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/userEntity.CreateUserRes'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Get Users
+      tags:
+      - User
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Users
+      parameters:
+      - description: user id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Users
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get User
+      parameters:
+      - description: user id
+        in: path
+        name: request
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userEntity.CreateUserRes'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User
+      tags:
+      - User
+    patch:
+      consumes:
+      - application/json
+      description: Update User
+      parameters:
+      - description: user id
+        in: path
+        name: request
+        required: true
+        type: string
+      - description: update details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/userEntity.UpdateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userEntity.CreateUserRes'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Users
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: login details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/userEntity.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/userEntity.CreateUserRes'
+      summary: Login
+      tags:
+      - Auth
+schemes:
+- http
+- https
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
