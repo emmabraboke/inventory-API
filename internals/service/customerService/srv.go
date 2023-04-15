@@ -30,17 +30,21 @@ func (t *customerSrv) CreateCustomer(req *customerEntity.Customer) error {
 	if err := t.validation.Validate(req); err != nil {
 		return err
 	}
-
+	
+	
 	_, err := t.repo.GetCustomerByEmail(req.Email)
 
 	if err == nil {
 		return fmt.Errorf("customer exist already")
 	}
 
+
+
 	req.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	req.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 
 	return t.repo.CreateCustomer(req)
+
 }
 
 func (t *customerSrv) GetCustomers() ([]*customerEntity.Customer, error) {
