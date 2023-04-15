@@ -10,6 +10,7 @@ import (
 	mongoSaleRepo "inventory/internals/repository/saleRepo/mongoRepo"
 	mongoTransactionRepo "inventory/internals/repository/transactionRepo/mongoRepo"
 	mongoUserRepo "inventory/internals/repository/userRepo/mongoRepo"
+	"inventory/internals/service/cloudinaryService"
 	"inventory/internals/service/cryptoService"
 	"inventory/internals/service/customerService"
 	"inventory/internals/service/invoiceService"
@@ -41,6 +42,7 @@ func Setup() {
 	}
 
 	database := mongoDatabase.NewDatabase(config.DatabaseURI, "inventory")
+	cloudinarySrv := cloudinaryService.NewCloudinarySrv(config.CloudinaryUrl)
 
 	conn := database.Connect()
 	validationSrv := validationService.NewValidationSrv()
@@ -63,7 +65,7 @@ func Setup() {
 	crypoSrv := cryptoService.NewCryptoService()
 	paymentSrv := paymentService.NewPaymentSrv(config.PaystackSecret, paystackUrl)
 
-	userSrv := userService.NewUserSrv(userRepo, validationSrv, crypoSrv, tokenSrv)
+	userSrv := userService.NewUserSrv(userRepo, validationSrv, crypoSrv, tokenSrv, cloudinarySrv)
 	customerSrv := customerService.NewCustomerSrv(customerRepo, validationSrv)
 	productSrv := productService.NewproductSrv(productRepo, validationSrv)
 	saleSrv := saleService.NewsaleSrv(saleRepo, validationSrv)

@@ -6,21 +6,26 @@ import (
 	"fmt"
 	"inventory/internals/entity/userEntity"
 	"inventory/internals/repository/userRepo"
+	"inventory/internals/service/cloudinaryService"
 	"inventory/internals/service/cryptoService"
 	"inventory/internals/service/tokenService"
 	"inventory/internals/service/validationService"
+
+	// "mime/multipart"
+	// "strings"
 	"time"
 )
 
 type userSrv struct {
-	repo       userRepo.UserRepository
-	cryptoSrv  cryptoService.CryptoService
-	token      tokenService.TokenService
-	validation validationService.ValidationService
+	repo          userRepo.UserRepository
+	cryptoSrv     cryptoService.CryptoService
+	token         tokenService.TokenService
+	validation    validationService.ValidationService
+	cloudinarySrv cloudinaryService.CloudinaryService
 }
 
 type UserService interface {
-	CreateUser(req *userEntity.CreateUserReq) error
+	CreateUser(req *userEntity.CreateUserReq, file userEntity.ImageFile) error
 	GetUsers() ([]*userEntity.CreateUserRes, error)
 	Login(req *userEntity.Login) (*userEntity.CreateUserRes, *string, error)
 	GetUser(id string) (*userEntity.CreateUserRes, error)
@@ -28,8 +33,8 @@ type UserService interface {
 	DeleteUser(id string) error
 }
 
-func NewUserSrv(repo userRepo.UserRepository, validation validationService.ValidationService, cryptoSrv cryptoService.CryptoService, token tokenService.TokenService) UserService {
-	return &userSrv{repo: repo, validation: validation, cryptoSrv: cryptoSrv, token: token}
+func NewUserSrv(repo userRepo.UserRepository, validation validationService.ValidationService, cryptoSrv cryptoService.CryptoService, token tokenService.TokenService, cloudinarySrv cloudinaryService.CloudinaryService) UserService {
+	return &userSrv{repo: repo, validation: validation, cryptoSrv: cryptoSrv, token: token, cloudinarySrv: cloudinarySrv}
 }
 
 // Create User
@@ -41,7 +46,7 @@ func NewUserSrv(repo userRepo.UserRepository, validation validationService.Valid
 // @Param request body userEntity.CreateUserReq true "user details"
 // @Success	200  {object} string
 // @Router	/user [post]
-func (t *userSrv) CreateUser(req *userEntity.CreateUserReq) error {
+func (t *userSrv) CreateUser(req *userEntity.CreateUserReq, file userEntity.ImageFile) error {
 
 	if err := t.validation.Validate(req); err != nil {
 		return err
@@ -53,6 +58,9 @@ func (t *userSrv) CreateUser(req *userEntity.CreateUserReq) error {
 		return fmt.Errorf("user exist already")
 	}
 
+	imageUrl, _ := t.cloudinarySrv.ImageUpload(file)
+
+	req.ProfileImage = imageUrl
 	req.Password, _ = t.cryptoSrv.HashPassword(req.Password)
 	req.CreatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	req.UpdatedAt, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
@@ -155,6 +163,25 @@ func (t *userSrv) GetUser(id string) (*userEntity.CreateUserRes, error) {
 
 	return user, nil
 }
+
+// func (t *userSrv) UploadImage(file *multipart.FileHeader, userId string) (*userEntity.CreateUserReq, error) {
+// 	var res userEntity.CreateUserReq
+// 	fileType := strings.Split(file.Header.Get("Content-Type"), "/")[1]
+
+// 	fileName := fmt.Sprintf("%s/%s.%s", userId, uuid.New().String(), fileType)
+
+// 	image, err := file.Open()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer image.Close()
+
+// 	err = t.cloudinarySrv.UploadImage(image, fileName)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// }
 
 // Update User
 // @Summary	Update Users

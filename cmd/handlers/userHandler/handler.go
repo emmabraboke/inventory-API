@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 type userHandler struct {
@@ -20,14 +21,31 @@ func NewUserHandler(srv userService.UserService) *userHandler {
 
 func (t *userHandler) SignUp(c *gin.Context) {
 	var req userEntity.CreateUserReq
-	err := c.ShouldBindJSON(&req)
+	var file userEntity.ImageFile
+
+	image,err := c.FormFile("file")
+
+	if err != nil {
+		log.Println("no file provided")
+	}
+
+	
+	imageFile,_ := image.Open() 
+	file.File = imageFile 
+
+
+	defer imageFile.Close()
+
+	log.Println(image)
+
+	err = c.ShouldBindWith(&req, binding.Form)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 
-	err = t.srv.CreateUser(&req)
+	err = t.srv.CreateUser(&req, file)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
