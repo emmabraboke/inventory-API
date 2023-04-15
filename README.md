@@ -7,7 +7,7 @@ An inventory application
 ### 1.1 View Application and Documentation
 
 - Application live url - https://inventory-staging-api.onrender.com
-- Documentation - https://inventory-staging-api.onrender.com/documentation
+- Documentation - https://inventory-staging-api.onrender.com/docs
 
 ### 1.2 Requirements
 
