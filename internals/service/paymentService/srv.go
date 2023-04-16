@@ -28,7 +28,7 @@ func (t *paymentSrv) CreatePayment(paystackReq *transactionEntity.PayStackReq) (
 	if err != nil {
 		return nil, err
 	}
-
+ 
 	req, err := http.NewRequest("POST", t.apiUrl, bytes.NewReader(bodyBytes))
 
 	if err != nil {

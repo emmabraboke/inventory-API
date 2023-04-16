@@ -12,7 +12,11 @@ type Config struct {
 	DatabaseURI    string `mapstructure:"DATABASE_URI"`
 	PaystackSecret string `mapstructure:"PAYSTACK_SECRET"`
 	JWTSecret      string `mapstructure:"JWT_SECRET"`
-	CloudinaryUrl	string `mapstructure:"CLOUDINARY_URL"`
+	CloudinaryUrl  string `mapstructure:"CLOUDINARY_URL"`
+	SMTPHost       string `mapstructure:"SMTP_HOST"`
+	SMTPUser       string `mapstructure:"SMTP_USER"`
+	SMTPPort       string `mapstructure:"SMTP_PORT"`
+	SMTPPassword   string `mapstructure:"SMTP_PASSWORD"`
 }
 
 func GetConfig(path string) (*Config, error) {

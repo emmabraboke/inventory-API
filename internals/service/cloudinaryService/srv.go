@@ -35,8 +35,7 @@ func (t *cloudinarySrv) ImageUpload(file userEntity.ImageFile) (*string, error) 
 	cld := t.CloudinaryInstance()
    
 
-	uploadResult, err := cld.Upload.Upload(ctx, file, uploader.UploadParams{
-		PublicID:  "nini",
+	uploadResult, err := cld.Upload.Upload(ctx, file.File, uploader.UploadParams{
 		ResourceType: "image",
 	})
 
