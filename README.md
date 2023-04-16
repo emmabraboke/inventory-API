@@ -40,7 +40,7 @@ vi .env
 
 ### 1.4 Running the app
 
-You are now ready to launch the NestJS application using the command below.
+You are now ready to launch the go application using the command below.
 
 ```sh
 # Run the

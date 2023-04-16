@@ -8,16 +8,16 @@ import (
 )
 
 type CreateUserReq struct {
-	Id           primitive.ObjectID `form:"_id" bson:"_id"`
-	FirstName    string             `form:"firstName" bson:"firstName" validate:"required,min=3"`
-	LastName     string             `form:"lastName" bson:"lastName" validate:"required,min=3"`
-	Email        string             `form:"email" validate:"required,email"`
-	Phone        *string            `form:"phone"`
-	ProfileImage *string            `form:"profileImage" bson:"profileImage"`
-	Password     string             `form:"password" validate:"required"`
-	RefreshToken string             `form:"refreshToken" bson:"refreshToken"`
-	CreatedAt    time.Time          `form:"createdAt" bson:"createdAt"`
-	UpdatedAt    time.Time          `form:"updateAt" bson:"updateAt"`
+	Id           primitive.ObjectID `json:"_id" bson:"_id"`
+	FirstName    string             `json:"firstName" form:"firstName" bson:"firstName" validate:"required,min=3"`
+	LastName     string             `json:"lastName" form:"lastName" bson:"lastName" validate:"required,min=3"`
+	Email        string             `json:"email" form:"email" validate:"required,email"`
+	Phone        *string            `json:"phone" form:"phone"`
+	ProfileImage *string            `json:"profileImage" form:"profileImage" bson:"profileImage"`
+	Password     string             `json:"password" form:"password" validate:"required"`
+	RefreshToken string             `json:"refreshToken" form:"refreshToken" bson:"refreshToken"`
+	CreatedAt    time.Time          `json:"createdAt" form:"createdAt" bson:"createdAt"`
+	UpdatedAt    time.Time          `json:"updatedAt" form:"updatedAt" bson:"updatedAt"`
 }
 
 type CreateUserRes struct {
@@ -46,4 +46,18 @@ type UpdateUserReq struct {
 	ProfileImage *string   `json:"profileImage" bson:"profileImage"`
 	RefreshToken *string   `json:"refreshToken" bson:"refreshToken"`
 	UpdatedAt    time.Time `json:"updateAt" bson:"updateAt"`
+}
+
+type EmailReq struct {
+	To      string `json:"to"`
+	From    string `json:"from"`
+	Subject string `json:"subject"`
+	Body    string `json:"body"`
+}
+
+type BulkEmailReq struct {
+	To      []string `json:"to"`
+	From    string   `json:"from"`
+	Subject string   `json:"subject"`
+	Body    string   `json:"body"`
 }

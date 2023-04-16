@@ -13,6 +13,7 @@ import (
 	"inventory/internals/service/cloudinaryService"
 	"inventory/internals/service/cryptoService"
 	"inventory/internals/service/customerService"
+	"inventory/internals/service/emailService"
 	"inventory/internals/service/invoiceService"
 	"inventory/internals/service/paymentService"
 	"inventory/internals/service/productService"
@@ -43,6 +44,12 @@ func Setup() {
 
 	database := mongoDatabase.NewDatabase(config.DatabaseURI, "inventory")
 	cloudinarySrv := cloudinaryService.NewCloudinarySrv(config.CloudinaryUrl)
+
+	_ = emailService.NewEmailSrv(config.SMTPHost, config.SMTPPort, config.SMTPPassword, config.SMTPUser)
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	conn := database.Connect()
 	validationSrv := validationService.NewValidationSrv()
